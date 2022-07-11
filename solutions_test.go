@@ -112,6 +112,78 @@ func TestLastButOne(t *testing.T) {
 	}
 }
 
+func TestNth(t *testing.T) {
+	scenarios := []struct {
+		title        string
+		l            list
+		pos          int
+		expectedOK   bool
+		expectedItem int
+	}{
+		{
+			title:        "nil list",
+			l:            nil,
+			pos:          1,
+			expectedOK:   false,
+			expectedItem: 0,
+		},
+		{
+			title:        "empty list",
+			l:            makeList([]int{}),
+			pos:          1,
+			expectedOK:   false,
+			expectedItem: 0,
+		},
+		{
+			title:        "out of bounds",
+			l:            makeList([]int{1}),
+			pos:          2,
+			expectedOK:   false,
+			expectedItem: 0,
+		},
+		{
+			title:        "in bounds",
+			l:            makeList([]int{1}),
+			pos:          1,
+			expectedOK:   true,
+			expectedItem: 1,
+		},
+		{
+			title:        "negative pos",
+			l:            makeList([]int{1}),
+			pos:          -1,
+			expectedOK:   false,
+			expectedItem: 0,
+		},
+		{
+			title:        "10 items",
+			l:            makeList([]int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}),
+			pos:          10,
+			expectedOK:   true,
+			expectedItem: 100,
+		},
+		{
+			title:        "middle of 10",
+			l:            makeList([]int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}),
+			pos:          5,
+			expectedOK:   true,
+			expectedItem: 50,
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			item, ok := nth(sce.l, sce.pos)
+			assertEq(item, sce.expectedItem, t)
+			assertEq(ok, sce.expectedOK, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")

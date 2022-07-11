@@ -37,6 +37,22 @@ func lastButOne(l list) (int, bool) {
 	return lastButOne(l.next)
 }
 
+func nth(l list, pos int) (int, bool) {
+	current := l
+	i := 1
+
+	for current != nil && i <= pos {
+		if i == pos {
+			return current.val, true
+		}
+
+		i++
+		current = current.next
+	}
+
+	return 0, false
+}
+
 // func printList(l list) {
 // 	if l == nil {
 // 		return
