@@ -27,6 +27,16 @@ func last(l list) (int, bool) {
 	return last(l.next)
 }
 
+func lastButOne(l list) (int, bool) {
+	if l == nil {
+		return 0, false
+	} else if l.next != nil && l.next.next == nil {
+		return l.val, true
+	}
+
+	return lastButOne(l.next)
+}
+
 // func printList(l list) {
 // 	if l == nil {
 // 		return
