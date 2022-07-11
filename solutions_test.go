@@ -184,6 +184,46 @@ func TestNth(t *testing.T) {
 	}
 }
 
+func TestCount(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		l        list
+		expected int
+	}{
+		{
+			title:    "nil list",
+			l:        nil,
+			expected: 0,
+		},
+		{
+			title:    "empty list",
+			l:        makeList([]int{}),
+			expected: 0,
+		},
+		{
+			title:    "list with 1 element",
+			l:        makeList([]int{1}),
+			expected: 1,
+		},
+		{
+			title:    "list 5 elements",
+			l:        makeList([]int{1, 2, 3, 4, 5}),
+			expected: 5,
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			result := count(sce.l)
+			assertEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")

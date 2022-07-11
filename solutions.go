@@ -53,6 +53,18 @@ func nth(l list, pos int) (int, bool) {
 	return 0, false
 }
 
+func count(l list) int {
+	current := l
+	count := 0
+
+	for current != nil {
+		count++
+		current = current.next
+	}
+
+	return count
+}
+
 // func printList(l list) {
 // 	if l == nil {
 // 		return
