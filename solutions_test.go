@@ -224,10 +224,61 @@ func TestCount(t *testing.T) {
 	}
 }
 
+func TestReverse(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		l        list
+		expected []int
+	}{
+		{
+			title:    "nil list",
+			l:        nil,
+			expected: []int{},
+		},
+		{
+			title:    "empty list",
+			l:        makeList([]int{}),
+			expected: []int{},
+		},
+		{
+			title:    "three elements",
+			l:        makeList([]int{1, 2, 3}),
+			expected: []int{3, 2, 1},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			got := reverse(sce.l)
+			assertSliceEq(listToSlice(got), sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
 		t.Errorf("got: %v", got)
 		t.Errorf("want: %v", want)
+	}
+}
+
+func assertSliceEq[T comparable](got, want []T, t *testing.T) {
+	if len(got) != len(want) {
+		t.Error("assertion failed")
+		t.Errorf("got: %v", got)
+		t.Errorf("want: %v", want)
+		return
+	}
+
+	for idx, item := range got {
+		if want[idx] != item {
+			t.Error("assertion failed")
+			t.Errorf("got: %v", got)
+			t.Errorf("want: %v", want)
+		}
 	}
 }

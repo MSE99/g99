@@ -65,18 +65,35 @@ func count(l list) int {
 	return count
 }
 
-// func printList(l list) {
-// 	if l == nil {
-// 		return
-// 	}
+func reverse(l list) list {
+	items := []int{}
+	traverseInRev(l, func(val int) {
+		items = append(items, val)
+	})
+	return makeList(items)
+}
 
-// 	result := ""
-// 	current := l
+func traverseInRev(l list, cb func(int)) {
+	if l == nil {
+		return
+	}
 
-// 	for current != nil {
-// 		result += fmt.Sprintf("%v ", current.val)
-// 		current = current.next
-// 	}
+	traverseInRev(l.next, cb)
+	cb(l.val)
+}
 
-// 	fmt.Println(result)
-// }
+func listToSlice(l list) []int {
+	if l == nil {
+		return []int{}
+	}
+
+	result := []int{}
+	current := l
+
+	for current != nil {
+		result = append(result, current.val)
+		current = current.next
+	}
+
+	return result
+}
