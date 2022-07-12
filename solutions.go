@@ -73,6 +73,24 @@ func reverse(l list) list {
 	return makeList(items)
 }
 
+func isPalindrome(l list) bool {
+	items := []int{}
+	traverseInRev(l, func(item int) {
+		items = append(items, item)
+	})
+
+	for i := 0; i < len(items)/2; i++ {
+		item := items[i]
+		opposite := items[len(items)-1-i]
+
+		if item != opposite {
+			return false
+		}
+	}
+
+	return true
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

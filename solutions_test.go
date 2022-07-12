@@ -258,6 +258,66 @@ func TestReverse(t *testing.T) {
 	}
 }
 
+func TestPalindrome(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       list
+		expected bool
+	}{
+		{
+			title:    "nil list",
+			in:       nil,
+			expected: true,
+		},
+		{
+			title:    "empty list",
+			in:       makeList([]int{}),
+			expected: true,
+		},
+		{
+			title:    "one element",
+			in:       makeList([]int{1}),
+			expected: true,
+		},
+		{
+			title:    "two different elements",
+			in:       makeList([]int{1, 2}),
+			expected: false,
+		},
+		{
+			title:    "three dupes",
+			in:       makeList([]int{1, 1, 1}),
+			expected: true,
+		},
+		{
+			title:    "five dupes",
+			in:       makeList([]int{7, 7, 7, 7, 7}),
+			expected: true,
+		},
+		{
+			title:    "palindrome#1",
+			in:       makeList([]int{1, 2, 2, 1}),
+			expected: true,
+		},
+		{
+			title:    "palindrome#2",
+			in:       makeList([]int{5, 3, 5, 5, 5, 3, 5}),
+			expected: true,
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			result := isPalindrome(sce.in)
+			assertEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
