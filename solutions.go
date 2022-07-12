@@ -129,6 +129,17 @@ func eliminate(l list) list {
 	return helper(l, []int{})
 }
 
+func lenEncoding(in []int) [][2]int {
+	packed := pack(in)
+	result := [][2]int{}
+
+	for _, p := range packed {
+		result = append(result, [2]int{len(p), p[0]})
+	}
+
+	return result
+}
+
 func pack(in []int) [][]int {
 	result := [][]int{}
 	current := []int{}

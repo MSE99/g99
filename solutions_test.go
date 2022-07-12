@@ -449,6 +449,46 @@ func TestPack(t *testing.T) {
 	}
 }
 
+func TestLenEncoding(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		expected [][2]int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: [][2]int{},
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			expected: [][2]int{},
+		},
+		{
+			title:    "4 items",
+			in:       []int{1, 1, 2, 2},
+			expected: [][2]int{{2, 1}, {2, 2}},
+		},
+		{
+			title:    "11 items",
+			in:       []int{1, 1, 2, 2, 1, 1, 1, 4, 4, 4, 4},
+			expected: [][2]int{{2, 1}, {2, 2}, {3, 1}, {4, 4}},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			result := lenEncoding(sce.in)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
