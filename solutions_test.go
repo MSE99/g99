@@ -1,6 +1,9 @@
 package g99
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestLastElement(t *testing.T) {
 	scenarios := []struct {
@@ -406,6 +409,46 @@ func TestEliminate(t *testing.T) {
 	}
 }
 
+func TestPack(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		expected [][]int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: [][]int{},
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			expected: [][]int{},
+		},
+		{
+			title:    "slice with two elements",
+			in:       []int{1, 1, 2, 2},
+			expected: [][]int{{1, 1}, {2, 2}},
+		},
+		{
+			title:    "pairs",
+			in:       []int{1, 1, 2, 2, 1, 1, 3, 3, 4, 4, 5, 5},
+			expected: [][]int{{1, 1}, {2, 2}, {1, 1}, {3, 3}, {4, 4}, {5, 5}},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			result := pack(sce.in)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
@@ -428,5 +471,16 @@ func assertSliceEq[T comparable](got, want []T, t *testing.T) {
 			t.Errorf("got: %v", got)
 			t.Errorf("want: %v", want)
 		}
+	}
+}
+
+func assertSerializedEq[T any](got, want T, t *testing.T) {
+	serializedGot := fmt.Sprintf("%v", got)
+	serializedWant := fmt.Sprintf("%v", want)
+
+	if serializedGot != serializedWant {
+		t.Error("assertion failed")
+		t.Errorf("got: %v", serializedGot)
+		t.Errorf("want: %v", serializedWant)
 	}
 }

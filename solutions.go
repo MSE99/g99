@@ -129,6 +129,26 @@ func eliminate(l list) list {
 	return helper(l, []int{})
 }
 
+func pack(in []int) [][]int {
+	result := [][]int{}
+	current := []int{}
+
+	for _, item := range in {
+		if len(current) == 0 || current[0] == item {
+			current = append(current, item)
+		} else if current[0] != item {
+			result = append(result, current)
+			current = []int{item}
+		}
+	}
+
+	if len(current) > 0 {
+		result = append(result, current)
+	}
+
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return
