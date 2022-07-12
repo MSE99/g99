@@ -91,6 +91,24 @@ func isPalindrome(l list) bool {
 	return true
 }
 
+// TODO: needs more work!, Solution to problem #7, not a perfect solution
+// uses too much runtime type assertion and probably
+// very slow
+func flatten(l []any) []int {
+	result := []int{}
+
+	for _, item := range l {
+		switch item := item.(type) {
+		case int:
+			result = append(result, item)
+		case []any:
+			result = append(result, flatten(item)...)
+		}
+	}
+
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

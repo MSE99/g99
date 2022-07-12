@@ -318,6 +318,50 @@ func TestPalindrome(t *testing.T) {
 	}
 }
 
+func TestFlatten(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []any
+		expected []int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: []int{},
+		},
+		{
+			title:    "empty slice",
+			in:       []any{},
+			expected: []int{},
+		},
+		{
+			title:    "slice with non slice elements",
+			in:       []any{1, 2, 3, 4},
+			expected: []int{1, 2, 3, 4},
+		},
+		{
+			title:    "slice with one slice",
+			in:       []any{[]any{1, 2, 3, 4}},
+			expected: []int{1, 2, 3, 4},
+		},
+		{
+			title:    "slice with embedded slices",
+			in:       []any{[]any{1, []any{2, 3}}, []any{4, []any{5}}},
+			expected: []int{1, 2, 3, 4, 5},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := flatten(sce.in)
+			assertSliceEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
