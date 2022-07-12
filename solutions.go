@@ -109,6 +109,26 @@ func flatten(l []any) []int {
 	return result
 }
 
+func eliminate(l list) list {
+	var helper func(list, []int) list
+
+	helper = func(l list, items []int) list {
+		if l == nil {
+			return makeList(items)
+		}
+
+		for _, item := range items {
+			if l.val == item {
+				return helper(l.next, items)
+			}
+		}
+
+		return helper(l.next, append(items, l.val))
+	}
+
+	return helper(l, []int{})
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

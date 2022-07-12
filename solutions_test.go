@@ -362,6 +362,50 @@ func TestFlatten(t *testing.T) {
 	}
 }
 
+func TestEliminate(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       list
+		expected list
+	}{
+		{
+			title:    "nil list",
+			in:       nil,
+			expected: makeList([]int{}),
+		},
+		{
+			title:    "empty list",
+			in:       makeList([]int{}),
+			expected: makeList([]int{}),
+		},
+		{
+			title:    "list with consecutive dupes",
+			in:       makeList([]int{1, 1, 2, 2, 3, 3}),
+			expected: makeList([]int{1, 2, 3}),
+		},
+		{
+			title:    "list with non-consecutive dupes",
+			in:       makeList([]int{1, 2, 3, 1, 2, 3}),
+			expected: makeList([]int{1, 2, 3}),
+		},
+		{
+			title:    "list with non-consecutive dupes #2",
+			in:       makeList([]int{4, 5, 5, 4}),
+			expected: makeList([]int{4, 5}),
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := eliminate(sce.in)
+			assertSliceEq(listToSlice(result), listToSlice(sce.expected), t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
