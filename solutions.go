@@ -221,6 +221,23 @@ func dupeX(in []int, x int) []int {
 	return result
 }
 
+func dropNth(in []int, nth int) []int {
+	result := []int{}
+
+	for i, j := 0, 1; i < len(in); i++ {
+		if j < nth {
+			j++
+		} else {
+			j = 1
+			continue
+		}
+
+		result = append(result, in[i])
+	}
+
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

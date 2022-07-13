@@ -751,6 +751,56 @@ func TestDupeX(t *testing.T) {
 	}
 }
 
+func TestDropNth(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		expected []int
+		nth      int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: []int{},
+			nth:      0,
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			expected: []int{},
+			nth:      3,
+		},
+		{
+			title:    "1 element & nth = 1",
+			in:       []int{1},
+			expected: []int{},
+			nth:      1,
+		},
+		{
+			title:    "every 3rd",
+			in:       []int{1, 2, 3, 4, 5, 6},
+			expected: []int{1, 2, 4, 5},
+			nth:      3,
+		},
+		{
+			title:    "every 4th",
+			in:       []int{1, 2, 3, 4, 5, 6, 7, 8},
+			expected: []int{1, 2, 3, 5, 6, 7},
+			nth:      4,
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := dropNth(sce.in, sce.nth)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
