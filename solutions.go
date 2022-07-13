@@ -192,6 +192,19 @@ func pack(in []int) [][]int {
 	return result
 }
 
+func dupe(in []int) []int {
+	encoded := lenEncoding(in)
+	result := []int{}
+
+	for _, reps := range encoded {
+		for i := 0; i < reps[0]*2; i++ {
+			result = append(result, reps[1])
+		}
+	}
+
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

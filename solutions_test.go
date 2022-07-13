@@ -602,6 +602,92 @@ func TestDecodeList(t *testing.T) {
 	}
 }
 
+func TestDupeList(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		expected []int
+	}{
+		{
+			title:    "nill slice",
+			in:       nil,
+			expected: []int{},
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			expected: []int{},
+		},
+		{
+			title:    "1 element slice",
+			in:       []int{1},
+			expected: []int{1, 1},
+		},
+		{
+			title:    "2 element slice",
+			in:       []int{1, 2},
+			expected: []int{1, 1, 2, 2},
+		},
+		{
+			title:    "consecutive elements #1",
+			in:       []int{1, 1, 1},
+			expected: []int{1, 1, 1, 1, 1, 1},
+		},
+		{
+			title:    "consecutive elements #2",
+			in:       []int{1, 1, 2, 2, 3, 3},
+			expected: []int{1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3},
+		},
+		{
+			title: "consecutive elements #3",
+			in: []int{
+				4, 4, 4,
+				5, 5,
+				2,
+			},
+			expected: []int{
+				4, 4, 4,
+				4, 4, 4,
+
+				5, 5,
+				5, 5,
+
+				2, 2,
+			},
+		},
+		{
+			title: "consecutive elements #4",
+			in: []int{
+				4,
+
+				5, 5, 5,
+				5, 5, 5,
+
+				2,
+			},
+			expected: []int{
+				4, 4,
+
+				5, 5, 5, 5,
+				5, 5, 5, 5,
+				5, 5, 5, 5,
+
+				2, 2,
+			},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := dupe(sce.in)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
