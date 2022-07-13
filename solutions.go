@@ -238,6 +238,21 @@ func dropNth(in []int, nth int) []int {
 	return result
 }
 
+func extract(in []int, at int) ([]int, []int) {
+	left := []int{}
+	right := []int{}
+
+	for _, item := range in {
+		if len(left) < at {
+			left = append(left, item)
+		} else {
+			right = append(right, item)
+		}
+	}
+
+	return left, right
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

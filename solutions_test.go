@@ -801,6 +801,57 @@ func TestDropNth(t *testing.T) {
 	}
 }
 
+func TestExtract(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		expected [2][]int
+		at       int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: [2][]int{{}, {}},
+			at:       0,
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			expected: [2][]int{{}, {}},
+			at:       0,
+		},
+		{
+			title:    "three elements",
+			in:       []int{1, 2, 3},
+			expected: [2][]int{{1, 2, 3}, {}},
+			at:       3,
+		},
+		{
+			title:    "four elements",
+			in:       []int{1, 2, 3, 4},
+			expected: [2][]int{{1, 2, 3}, {4}},
+			at:       3,
+		},
+		{
+			title:    "five elements",
+			in:       []int{1, 2, 3, 4, 5},
+			expected: [2][]int{{1, 2}, {3, 4, 5}},
+			at:       2,
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			left, right := extract(sce.in, sce.at)
+			assertSerializedEq([2][]int{left, right}, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
