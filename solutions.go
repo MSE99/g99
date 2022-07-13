@@ -155,6 +155,23 @@ func moddedLenEncoding(l []int) []any {
 	return result
 }
 
+func decodeList(l []any) []int {
+	result := []int{}
+
+	for _, item := range l {
+		switch t := item.(type) {
+		case int:
+			result = append(result, t)
+		case [2]int:
+			for i := 0; i < t[0]; i++ {
+				result = append(result, t[1])
+			}
+		}
+	}
+
+	return result
+}
+
 func pack(in []int) [][]int {
 	result := [][]int{}
 	current := []int{}

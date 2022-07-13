@@ -540,6 +540,68 @@ func TestModdedLenEncoding(t *testing.T) {
 	}
 }
 
+func TestDecodeList(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []any
+		expected []int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: []int{},
+		},
+		{
+			title:    "empty slice",
+			in:       []any{},
+			expected: []int{},
+		},
+		{
+			title:    "slice with no dupes",
+			in:       []any{1, 2, 3, 4, 5},
+			expected: []int{1, 2, 3, 4, 5},
+		},
+		{
+			title:    "slice with dupes",
+			in:       []any{1, 2, 3, 4, [2]int{2, 5}},
+			expected: []int{1, 2, 3, 4, 5, 5},
+		},
+		{
+			title: "slice with ONLY dupes",
+			in: []any{
+				[2]int{2, 1},
+				[2]int{2, 2},
+				[2]int{2, 3},
+				[2]int{2, 4},
+				[2]int{2, 5},
+			},
+			expected: []int{1, 1, 2, 2, 3, 3, 4, 4, 5, 5},
+		},
+		{
+			title: "slice with dupes in middle",
+			in: []any{
+				1, 1,
+				[2]int{2, 2},
+				[2]int{2, 3},
+				[2]int{2, 4},
+				5, 5,
+			},
+			expected: []int{1, 1, 2, 2, 3, 3, 4, 4, 5, 5},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			out := decodeList(sce.in)
+			assertSerializedEq(out, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
