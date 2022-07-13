@@ -205,6 +205,22 @@ func dupe(in []int) []int {
 	return result
 }
 
+func dupeX(in []int, x int) []int {
+	if x <= 0 {
+		return []int{}
+	}
+
+	result := []int{}
+
+	for _, item := range in {
+		for i := 0; i < x; i++ {
+			result = append(result, item)
+		}
+	}
+
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

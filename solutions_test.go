@@ -688,6 +688,69 @@ func TestDupeList(t *testing.T) {
 	}
 }
 
+func TestDupeX(t *testing.T) {
+	scenarios := []struct {
+		title string
+
+		in       []int
+		expected []int
+		x        int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: []int{},
+			x:        1,
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			expected: []int{},
+			x:        1,
+		},
+		{
+			title:    "x <= 0",
+			in:       []int{1, 2, 3},
+			expected: []int{},
+			x:        0,
+		},
+		{
+			title:    "x <= 0",
+			in:       []int{1, 2, 3},
+			expected: []int{},
+			x:        -5,
+		},
+		{
+			title:    "x == 0",
+			in:       []int{1, 2, 3},
+			expected: []int{},
+			x:        0,
+		},
+		{
+			title:    "x is 2",
+			in:       []int{1, 2, 3},
+			expected: []int{1, 1, 2, 2, 3, 3},
+			x:        2,
+		},
+		{
+			title:    "x is 1",
+			in:       []int{1, 2, 3},
+			expected: []int{1, 2, 3},
+			x:        1,
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := dupeX(sce.in, sce.x)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
