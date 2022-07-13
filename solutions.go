@@ -140,6 +140,21 @@ func lenEncoding(in []int) [][2]int {
 	return result
 }
 
+func moddedLenEncoding(l []int) []any {
+	encoded := lenEncoding(l)
+	result := []any{}
+
+	for _, item := range encoded {
+		if item[0] == 1 {
+			result = append(result, item[1])
+		} else {
+			result = append(result, item)
+		}
+	}
+
+	return result
+}
+
 func pack(in []int) [][]int {
 	result := [][]int{}
 	current := []int{}

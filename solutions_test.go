@@ -489,6 +489,57 @@ func TestLenEncoding(t *testing.T) {
 	}
 }
 
+func TestModdedLenEncoding(t *testing.T) {
+	scenarios := []struct {
+		title string
+
+		in       []int
+		expected []any
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			expected: []any{},
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			expected: []any{},
+		},
+		{
+			title:    "consecutive elements #1",
+			in:       []int{1, 2, 2, 3, 3},
+			expected: []any{1, [2]int{2, 2}, []int{2, 3}},
+		},
+		{
+			title:    "consecutive elements #2",
+			in:       []int{1, 2, 2, 3, 3, 4, 3},
+			expected: []any{1, [2]int{2, 2}, []int{2, 3}, 4, 3},
+		},
+		{
+			title:    "consecutive elements #3",
+			in:       []int{1, 2, 3, 4, 5},
+			expected: []any{1, 2, 3, 4, 5},
+		},
+		{
+			title:    "consecutive elements #4",
+			in:       []int{1, 2, 3, 4, 5, 5, 5},
+			expected: []any{1, 2, 3, 4, []int{3, 5}},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+
+			result := moddedLenEncoding(sce.in)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
