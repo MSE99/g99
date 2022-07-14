@@ -297,6 +297,14 @@ func insert(in []int, pos, item int) []int {
 	return result
 }
 
+func listFromRange(start, end int) []int {
+	result := []int{}
+	for i := start; i <= end; i++ {
+		result = append(result, i)
+	}
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return

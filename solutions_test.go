@@ -1033,6 +1033,40 @@ func TestInsert(t *testing.T) {
 	}
 }
 
+func TestListFromRange(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		r        [2]int
+		expected []int
+	}{
+		{
+			title:    "bad range",
+			r:        [2]int{5, 3},
+			expected: []int{},
+		},
+		{
+			title:    "1 to 5",
+			r:        [2]int{1, 5},
+			expected: []int{1, 2, 3, 4, 5},
+		},
+		{
+			title:    "-5 to 5",
+			r:        [2]int{-5, 5},
+			expected: []int{-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := listFromRange(sce.r[0], sce.r[1])
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")
