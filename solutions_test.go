@@ -914,6 +914,62 @@ func TestRotate(t *testing.T) {
 	}
 }
 
+func TestRemoveByIdx(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		idx      int
+		expected []int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			idx:      0,
+			expected: []int{},
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			idx:      0,
+			expected: []int{},
+		},
+		{
+			title:    "negative idx",
+			in:       []int{1, 2, 3, 4},
+			idx:      -50,
+			expected: []int{1, 2, 3, 4},
+		},
+		{
+			title:    "element at start",
+			in:       []int{1, 2, 3, 4},
+			idx:      0,
+			expected: []int{2, 3, 4},
+		},
+		{
+			title:    "element at end",
+			in:       []int{1, 2, 3, 4},
+			idx:      3,
+			expected: []int{1, 2, 3},
+		},
+		{
+			title:    "element at middle",
+			in:       []int{1, 2, 3, 4},
+			idx:      1,
+			expected: []int{1, 3, 4},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := removeByIdx(sce.in, sce.idx)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")

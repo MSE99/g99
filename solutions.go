@@ -260,6 +260,22 @@ func rotate(in []int, rot int) []int {
 	return result
 }
 
+func removeByIdx(in []int, idx int) []int {
+	if !(idx >= 0 && idx < len(in)) {
+		return in
+	}
+
+	result := make([]int, 0, len(in))
+
+	for pos, item := range in {
+		if pos != idx {
+			result = append(result, item)
+		}
+	}
+
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return
