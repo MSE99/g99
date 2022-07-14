@@ -852,6 +852,68 @@ func TestExtract(t *testing.T) {
 	}
 }
 
+func TestRotate(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		expected []int
+		rotation int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			rotation: 0,
+			expected: []int{},
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			rotation: 1,
+			expected: []int{},
+		},
+		{
+			title:    "slice with one element",
+			in:       []int{1},
+			rotation: 1,
+			expected: []int{1},
+		},
+		{
+			title:    "multiple elements #1",
+			in:       []int{1, 2, 3, 4, 5, 6},
+			rotation: 3,
+			expected: []int{4, 5, 6, 1, 2, 3},
+		},
+		{
+			title:    "multiple elements #2",
+			in:       []int{1, 2, 3, 4, 5, 6},
+			rotation: 5,
+			expected: []int{6, 1, 2, 3, 4, 5},
+		},
+		{
+			title:    "multiple elements #3",
+			in:       []int{1, 2, 3, 4, 5, 6},
+			rotation: 2,
+			expected: []int{3, 4, 5, 6, 1, 2},
+		},
+		{
+			title:    "multiple elements #4",
+			in:       []int{1, 2, 3, 4, 5, 6},
+			rotation: 4,
+			expected: []int{5, 6, 1, 2, 3, 4},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := rotate(sce.in, sce.rotation)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")

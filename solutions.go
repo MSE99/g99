@@ -253,6 +253,13 @@ func extract(in []int, at int) ([]int, []int) {
 	return left, right
 }
 
+func rotate(in []int, rot int) []int {
+	left, right := extract(in, rot)
+	result := append(make([]int, 0, len(in)), right...)
+	result = append(result, left...)
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return
