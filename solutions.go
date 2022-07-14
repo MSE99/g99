@@ -1,5 +1,7 @@
 package g99
 
+import "math/rand"
+
 type list *node
 
 type node struct {
@@ -303,6 +305,22 @@ func listFromRange(start, end int) []int {
 		result = append(result, i)
 	}
 	return result
+}
+
+func selectRandomElements(in []int, size int) []int {
+	if len(in) == 0 {
+		return []int{}
+	}
+
+	selected := make([]int, 0, size)
+
+	for len(selected) < size {
+		idx := rand.Intn(len(in))
+		item := in[idx]
+		selected = append(selected, item)
+	}
+
+	return selected
 }
 
 func traverseInRev(l list, cb func(int)) {
