@@ -970,6 +970,69 @@ func TestRemoveByIdx(t *testing.T) {
 	}
 }
 
+func TestInsert(t *testing.T) {
+	scenarios := []struct {
+		title    string
+		in       []int
+		pos      int
+		item     int
+		expected []int
+	}{
+		{
+			title:    "nil slice",
+			in:       nil,
+			pos:      0,
+			item:     99,
+			expected: []int{99},
+		},
+		{
+			title:    "empty slice",
+			in:       []int{},
+			pos:      0,
+			item:     99,
+			expected: []int{99},
+		},
+		{
+			title:    "empty slice #2",
+			in:       []int{},
+			pos:      2,
+			item:     99,
+			expected: []int{0, 0, 99},
+		},
+		{
+			title:    "insert at beginning",
+			in:       []int{1, 2, 3},
+			pos:      0,
+			item:     99,
+			expected: []int{99, 1, 2, 3},
+		},
+		{
+			title:    "insert at end",
+			in:       []int{1, 2, 3},
+			pos:      3,
+			item:     99,
+			expected: []int{1, 2, 3, 99},
+		},
+		{
+			title:    "insert at middle",
+			in:       []int{1, 2, 3},
+			pos:      2,
+			item:     99,
+			expected: []int{1, 2, 99, 3},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		sce := scenario
+
+		t.Run(sce.title, func(t *testing.T) {
+			t.Parallel()
+			result := insert(sce.in, sce.pos, sce.item)
+			assertSerializedEq(result, sce.expected, t)
+		})
+	}
+}
+
 func assertEq[T comparable](got, want T, t *testing.T) {
 	if got != want {
 		t.Error("assertion failed")

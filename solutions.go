@@ -276,6 +276,27 @@ func removeByIdx(in []int, idx int) []int {
 	return result
 }
 
+func insert(in []int, pos, item int) []int {
+	if pos+1 > len(in) {
+		result := make([]int, len(in)+(pos+1-len(in)))
+		copy(result, in)
+		result[pos] = item
+		return result
+	}
+
+	result := make([]int, 0, len(in)+1)
+
+	for idx, original := range in {
+		if idx == pos {
+			result = append(result, item)
+		}
+
+		result = append(result, original)
+	}
+
+	return result
+}
+
 func traverseInRev(l list, cb func(int)) {
 	if l == nil {
 		return
